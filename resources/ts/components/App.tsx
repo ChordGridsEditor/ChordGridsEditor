@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, createTheme, IconButton, MenuItem, Paper, ThemeProvider } from "@mui/material";
+import { Button, createTheme, IconButton, Paper, ThemeProvider } from "@mui/material";
 import { Public } from "@mui/icons-material";
 import axios from "axios";
 import DropdownMenu from "./DropdownMenu";
@@ -47,7 +47,18 @@ export function App({}: AppProps) {
 							icon: <Public />,
 							action: () => console.log("Bouton Action 3 cliqué"),
 						},
-					]}/>
+						{
+							label: "truc",
+							icon: <Public />,
+							children: [
+								{
+									label: "subaction 5",
+									icon: <Public />,
+									action: () => console.log("Bouton subaction 5 cliqué"),
+								},
+							]
+						},
+					]} />
 					<Button variant="text" color="primary" onClick={onClick}>Menu 2</Button>
 					<Button variant="text" color="primary" onClick={onClick}>Menu 3</Button>
 				</Paper>
