@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { AccountCircle, Edit, Public } from "@mui/icons-material";
 import axios from "axios";
-import DropdownMenu, { DropdownMenuProps } from "./DropdownMenu";
+import DropdownMenu from "./DropdownMenu";
 
 const darkTheme = createTheme({
 	palette: {
@@ -32,8 +32,6 @@ export function App({}: AppProps) {
 	const onClick = () => {
 		axios.get("/health").then(console.log, console.error);
 	};
-
-	const btnMargin = { margin: "2px 5px" };
 
 	const allDropdownMenus: { [key: string]: JSX.Element; } = {
 		"fichier":
@@ -107,26 +105,31 @@ export function App({}: AppProps) {
 		return menu;
 	}
 
+	const colorBtn = "rgb(110, 109, 92)";
+
+	const btnMargin = { margin: "2px 5px" };
+
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<Paper elevation={1} square sx={{ minHeight: "100vh" }}>
-				<Paper elevation={12} square sx={{ display: "flex", alignItems: "center" }}>
+
+				<Paper elevation={12} square sx={{ display: "flex", alignItems: "center", color: colorBtn }}>
 					<Box flex={1} display="flex" alignItems="center">
-						<IconButton color="primary" onClick={onClick}><Public /></IconButton>
+						<IconButton color="inherit" onClick={onClick}><Public /></IconButton>
 
-						<Divider orientation="vertical" variant="middle" flexItem />
+						<Divider color="inherit" orientation="vertical" variant="middle" flexItem />
 
-						<Button variant="text" color="primary" sx={btnMargin} onClick={e => setAnchorMenu1(e.currentTarget)}>Fichier</Button>
+						<Button variant="text" color="inherit" sx={btnMargin} onClick={e => setAnchorMenu1(e.currentTarget)}>Fichier</Button>
 						{displayDropdownMenu("fichier")}
 
-						<Button variant="text" color="primary" sx={btnMargin} onClick={e => setAnchorMenu2(e.currentTarget)}>Edition</Button>
+						<Button variant="text" color="inherit" sx={btnMargin} onClick={e => setAnchorMenu2(e.currentTarget)}>Edition</Button>
 						{displayDropdownMenu("edition")}
 					</Box>
 
 					<Box position="relative">
 						<Typography id="idGridName" variant="body1">Chord Grids Editor</Typography>
 						<IconButton
-							color="primary"
+							color="inherit"
 							sx={{ position: "absolute", left: "calc(100% + 10px)", top: "50%", transform: "translateY(-50%)" }}
 							onClick={() => console.log("Modifier le nom")}
 						>
@@ -136,9 +139,7 @@ export function App({}: AppProps) {
 
 					<Box flex={1} display="flex" alignItems="center" justifyContent="flex-end">
 						<Button variant="contained"><Edit />Share</Button>
-						<IconButton>
-							<AccountCircle />
-						</IconButton>
+						<IconButton><AccountCircle /></IconButton>
 					</Box>
 				</Paper>
 				<Paper elevation={6} square>
@@ -148,7 +149,6 @@ export function App({}: AppProps) {
 		</ThemeProvider>
 	);
 }
-
 App.defaultProps = {};
 
 export default App;
