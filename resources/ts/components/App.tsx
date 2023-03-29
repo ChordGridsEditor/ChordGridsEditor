@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import {
-	Avatar,
 	Box,
 	Button,
 	createTheme,
 	Divider,
 	IconButton,
 	Paper,
-	TextField,
 	ThemeProvider,
 	Typography
 } from "@mui/material";
 import { AccountCircle, Edit, Public } from "@mui/icons-material";
 import axios from "axios";
-import DropdownMenu from "./DropdownMenu";
+import DropdownMenu, { DropdownMenuProps } from "./DropdownMenu";
 
 const darkTheme = createTheme({
 	palette: {
@@ -28,11 +26,86 @@ export interface AppProps {
 }
 
 export function App({}: AppProps) {
-	const [ anchor, setAnchor ] = useState<HTMLElement>();
+	const [ anchorMenu1, setAnchorMenu1 ] = useState<HTMLElement>();
+	const [ anchorMenu2, setAnchorMenu2 ] = useState<HTMLElement>();
 
 	const onClick = () => {
 		axios.get("/health").then(console.log, console.error);
 	};
+
+	const btnMargin = { margin: "2px 5px" };
+
+	const allDropdownMenus: { [key: string]: JSX.Element; } = {
+		"fichier":
+			<DropdownMenu
+				anchor={anchorMenu1}
+				onClose={() => setAnchorMenu1(undefined)}
+				menu={[
+					{
+						label: "Action 1",
+						icon: <Public />,
+						shortcut: "Ctrl+S",
+						action: () => console.log("Bouton Action 1 cliqué"),
+					},
+					{
+						label: "Action 2",
+						icon: <Public />,
+						hasDividerBelow: true,
+						action: () => console.log("Bouton Action 2 cliqué"),
+					},
+					{
+						label: "Action 3",
+						icon: <Public />,
+						action: () => console.log("Bouton Action 3 cliqué"),
+					},
+					{
+						label: "truc",
+						icon: <Public />,
+						children: [
+							{
+								label: "truc",
+								icon: <Public />,
+								children: [
+									{
+										label: "truc",
+										icon: <Public />,
+										children: [
+											{
+												label: "subaction 5",
+												icon: <Public />,
+												action: () => console.log("Bouton subaction 5 cliqué"),
+											},
+										],
+									},
+								],
+							},
+						],
+					},
+				]}
+			/>,
+		"edition":
+			<DropdownMenu
+				anchor={anchorMenu2}
+				onClose={() => setAnchorMenu2(undefined)}
+				menu={[
+					{
+						label: "Action menu 2",
+						icon: <Public />,
+						action: () => console.log("Bouton Action 1 cliqué"),
+					}
+				]}
+			/>,
+	};
+
+	const displayDropdownMenu = (menuId: string) => {
+		const menu = allDropdownMenus[menuId] ?? undefined;
+		if(!menu){
+			console.error(`Le menuId ${menuId} n'existe pas.`);
+			return null;
+		}
+
+		return menu;
+	}
 
 	return (
 		<ThemeProvider theme={darkTheme}>
@@ -43,53 +116,11 @@ export function App({}: AppProps) {
 
 						<Divider orientation="vertical" variant="middle" flexItem />
 
-						<Button variant="text" color="primary" onClick={e => setAnchor(e.currentTarget)}>Menu 1</Button>
-						<DropdownMenu anchor={anchor} onClose={() => setAnchor(undefined)} menu={[
-							{
-								label: "Action 1",
-								icon: <Public />,
-								shortcut: "Ctrl+S",
-								action: () => console.log("Bouton Action 1 cliqué"),
-							},
-							{
-								label: "Action 2",
-								icon: <Public />,
-								hasDividerBelow: true,
-								action: () => console.log("Bouton Action 2 cliqué"),
-							},
-							{
-								label: "Action 3",
-								icon: <Public />,
-								action: () => console.log("Bouton Action 3 cliqué"),
-							},
-							{
-								label: "truc",
-								icon: <Public />,
-								children: [
-									{
-										label: "truc",
-										icon: <Public />,
-										children: [
-											{
-												label: "truc",
-												icon: <Public />,
-												children: [
-													{
-														label: "subaction 5",
-														icon: <Public />,
-														action: () => console.log("Bouton subaction 5 cliqué"),
-													},
-												]
-											},
-										]
-									},
-								]
-							},
-						]} />
+						<Button variant="text" color="primary" sx={btnMargin} onClick={e => setAnchorMenu1(e.currentTarget)}>Fichier</Button>
+						{displayDropdownMenu("fichier")}
 
-						<Button variant="text" color="primary" onClick={onClick}>Menu 2</Button>
-
-						<Button variant="text" color="primary" onClick={onClick}>Menu 3</Button>
+						<Button variant="text" color="primary" sx={btnMargin} onClick={e => setAnchorMenu2(e.currentTarget)}>Edition</Button>
+						{displayDropdownMenu("edition")}
 					</Box>
 
 					<Box position="relative">
