@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import {
+	Avatar,
 	Box,
 	Button,
-	createTheme,
 	Checkbox,
 	createTheme,
 	Divider,
 	FormControlLabel,
 	IconButton,
 	Paper,
-	ThemeProvider,
+	ThemeProvider, Tooltip,
 	Typography
 } from "@mui/material";
-import { AccountCircle, Edit, Public } from "@mui/icons-material";
+import { Edit, Public, ViewQuiltOutlined } from "@mui/icons-material";
 import axios from "axios";
 import DropdownMenu from "./DropdownMenu";
 import SelectableButtonGroup from "./SelectableButtonGroup";
@@ -42,117 +42,121 @@ export function App({}: AppProps) {
 		axios.get("/health").then(console.log, console.error);
 	};
 
-	const allDropdownMenus: { [key: string]: JSX.Element; } = {
-		"fichier":
-			<DropdownMenu
-				anchor={anchorMenu1}
-				onClose={() => setAnchorMenu1(undefined)}
-				menu={[
-					{
-						label: "Action 1",
-						icon: <Public />,
-						shortcut: "Ctrl+S",
-						action: () => console.log("Bouton Action 1 cliqué"),
-					},
-					{
-						label: "Action 2",
-						icon: <Public />,
-						hasDividerBelow: true,
-						action: () => console.log("Bouton Action 2 cliqué"),
-					},
-					{
-						label: "Action 3",
-						icon: <Public />,
-						action: () => console.log("Bouton Action 3 cliqué"),
-					},
-					{
-						label: "truc",
-						icon: <Public />,
-						children: [
-							{
-								label: "truc",
-								icon: <Public />,
-								children: [
-									{
-										label: "truc",
-										icon: <Public />,
-										children: [
-											{
-												label: "subaction 5",
-												icon: <Public />,
-												action: () => console.log("Bouton subaction 5 cliqué"),
-											},
-										],
-									},
-								],
-							},
-						],
-					},
-				]}
-			/>,
-		"edition":
-			<DropdownMenu
-				anchor={anchorMenu2}
-				onClose={() => setAnchorMenu2(undefined)}
-				menu={[
-					{
-						label: "Action menu 2",
-						icon: <Public />,
-						action: () => console.log("Bouton Action 1 cliqué"),
-					}
-				]}
-			/>,
-	};
-
-	const displayDropdownMenu = (menuId: string) => {
-		const menu = allDropdownMenus[menuId] ?? undefined;
-		if(!menu){
-			console.error(`Le menuId ${menuId} n'existe pas.`);
-			return null;
+	const fileMenu = [
+		{
+			label: "Action 1",
+			icon: <Public />,
+			shortcut: "Ctrl+S",
+			action: () => console.log("Bouton Action 1 cliqué"),
+		},
+		{
+			label: "Action 2",
+			icon: <Public />,
+			hasDividerBelow: true,
+			action: () => console.log("Bouton Action 2 cliqué"),
+		},
+		{
+			label: "Action 3",
+			icon: <Public />,
+			action: () => console.log("Bouton Action 3 cliqué"),
+		},
+		{
+			label: "truc",
+			icon: <Public />,
+			children: [
+				{
+					label: "truc",
+					icon: <Public />,
+					children: [
+						{
+							label: "truc",
+							icon: <Public />,
+							children: [
+								{
+									label: "subaction 5",
+									icon: <Public />,
+									action: () => console.log("Bouton subaction 5 cliqué"),
+								},
+							],
+						},
+					],
+				},
+			],
+		},
+	];
+	const editMenu = [
+		{
+			label: "Action menu 2",
+			icon: <Public />,
+			action: () => console.log("Bouton Action 1 cliqué"),
 		}
-
-		return menu;
-	}
-
-	const colorBtn = "rgb(110, 109, 92)";
-
-	const btnMargin = { margin: "2px 5px" };
+	];
 
 	return (
 		<ThemeProvider theme={darkTheme}>
-			<Paper elevation={1} square sx={{ minHeight: "100vh" }}>
+			<Box display="flex" flexDirection="column" minHeight="100vh">
+				<Paper elevation={12} square sx={{ display: "flex", alignItems: "center", p: 1 }}>
+					<Box flex={1} display="flex" alignItems="center" columnGap={1}>
+						<IconButton onClick={onClick} sx={{ color: "text.secondary", p: 0.75 }}>
+							<ViewQuiltOutlined />
+						</IconButton>
 
-				<Paper elevation={12} square sx={{ display: "flex", alignItems: "center", color: colorBtn }}>
-					<Box flex={1} display="flex" alignItems="center">
-						<IconButton color="inherit" onClick={onClick}><Public /></IconButton>
+						<Divider orientation="vertical" flexItem />
 
-						<Divider color="inherit" orientation="vertical" variant="middle" flexItem />
+						<Button
+							variant="text"
+							onClick={e => setAnchorMenu1(e.currentTarget)}
+							sx={{ color: "text.secondary" }}
+						>
+							Fichier
+						</Button>
+						<DropdownMenu anchor={anchorMenu1} onClose={() => setAnchorMenu1(undefined)} menu={fileMenu} />
 
-						<Button variant="text" color="inherit" sx={btnMargin} onClick={e => setAnchorMenu1(e.currentTarget)}>Fichier</Button>
-						{displayDropdownMenu("fichier")}
-
-						<Button variant="text" color="inherit" sx={btnMargin} onClick={e => setAnchorMenu2(e.currentTarget)}>Edition</Button>
-						{displayDropdownMenu("edition")}
+						<Button
+							variant="text"
+							onClick={e => setAnchorMenu2(e.currentTarget)}
+							sx={{ color: "text.secondary" }}
+						>
+							Edition
+						</Button>
+						<DropdownMenu anchor={anchorMenu2} onClose={() => setAnchorMenu2(undefined)} menu={editMenu} />
 					</Box>
 
 					<Box position="relative">
 						<Typography id="idGridName" variant="body1">Chord Grids Editor</Typography>
 						<IconButton
-							color="inherit"
-							sx={{ position: "absolute", left: "calc(100% + 10px)", top: "50%", transform: "translateY(-50%)" }}
+							sx={{
+								position: "absolute",
+								left: "calc(100% + 10px)",
+								top: "50%",
+								transform: "translateY(-50%)",
+								color: "text.secondary"
+						}}
 							onClick={() => console.log("Modifier le nom")}
 						>
 							<Edit />
 						</IconButton>
 					</Box>
 
-					<Box flex={1} display="flex" alignItems="center" justifyContent="flex-end">
-						<Button variant="contained"><Edit />Share</Button>
-						<IconButton><AccountCircle /></IconButton>
+					<Box flex={1} display="flex" alignItems="center" justifyContent="flex-end" columnGap={2}>
+						<Button variant="contained" startIcon={<Edit />}>Share</Button>
+
+						<IconButton sx={{ p: 0.5 }}>
+							<Avatar sx={{ bgcolor: "text.secondary", width: 28.5, height: 28.5 }}>C</Avatar>
+						</IconButton>
 					</Box>
 				</Paper>
-				<Paper elevation={6} square>
-					<IconButton color="primary" onClick={onClick}><Public /></IconButton>
+				<Paper elevation={6} square sx={{ display: "flex", alignItems: "center", columnGap: 1, p: 1 }}>
+					<Tooltip title="Action 1">
+						<IconButton onClick={() => console.log("Action 1")} size="small" sx={{ color: "text.secondary" }}>
+							<Public />
+						</IconButton>
+					</Tooltip>
+					<Tooltip title="Action 2">
+						<IconButton onClick={() => console.log("Action 2")} size="small" sx={{ color: "text.secondary" }}>
+							<Public />
+						</IconButton>
+					</Tooltip>
 				</Paper>
 				<Box display="flex" flex={1}>
 					<Paper elevation={1} square sx={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
