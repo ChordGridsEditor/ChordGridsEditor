@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import {
 	Box,
 	Button,
+	createTheme,
 	Checkbox,
 	createTheme,
+	Divider,
 	FormControlLabel,
 	IconButton,
 	Paper,
 	ThemeProvider,
 	Typography
 } from "@mui/material";
-import { Public } from "@mui/icons-material";
+import { AccountCircle, Edit, Public } from "@mui/icons-material";
 import axios from "axios";
 import DropdownMenu from "./DropdownMenu";
 import SelectableButtonGroup from "./SelectableButtonGroup";
@@ -31,7 +33,8 @@ type Shape = "0000" | "0011" | "0012" | "0122" | "0110" | "0120" | "0112" | "012
 type Chord = "C" | "D" | "E" | "F" | "G" | "A" | "B";
 
 export function App({}: AppProps) {
-	const [ anchor, setAnchor ] = useState<HTMLElement>();
+	const [ anchorMenu1, setAnchorMenu1 ] = useState<HTMLElement>();
+	const [ anchorMenu2, setAnchorMenu2 ] = useState<HTMLElement>();
 	const [ shape, setShape ] = useState<Shape>("0000");
 	const [ chord, setChord ] = useState<Chord>("C")
 
@@ -39,47 +42,117 @@ export function App({}: AppProps) {
 		axios.get("/health").then(console.log, console.error);
 	};
 
+	const allDropdownMenus: { [key: string]: JSX.Element; } = {
+		"fichier":
+			<DropdownMenu
+				anchor={anchorMenu1}
+				onClose={() => setAnchorMenu1(undefined)}
+				menu={[
+					{
+						label: "Action 1",
+						icon: <Public />,
+						shortcut: "Ctrl+S",
+						action: () => console.log("Bouton Action 1 cliqué"),
+					},
+					{
+						label: "Action 2",
+						icon: <Public />,
+						hasDividerBelow: true,
+						action: () => console.log("Bouton Action 2 cliqué"),
+					},
+					{
+						label: "Action 3",
+						icon: <Public />,
+						action: () => console.log("Bouton Action 3 cliqué"),
+					},
+					{
+						label: "truc",
+						icon: <Public />,
+						children: [
+							{
+								label: "truc",
+								icon: <Public />,
+								children: [
+									{
+										label: "truc",
+										icon: <Public />,
+										children: [
+											{
+												label: "subaction 5",
+												icon: <Public />,
+												action: () => console.log("Bouton subaction 5 cliqué"),
+											},
+										],
+									},
+								],
+							},
+						],
+					},
+				]}
+			/>,
+		"edition":
+			<DropdownMenu
+				anchor={anchorMenu2}
+				onClose={() => setAnchorMenu2(undefined)}
+				menu={[
+					{
+						label: "Action menu 2",
+						icon: <Public />,
+						action: () => console.log("Bouton Action 1 cliqué"),
+					}
+				]}
+			/>,
+	};
+
+	const displayDropdownMenu = (menuId: string) => {
+		const menu = allDropdownMenus[menuId] ?? undefined;
+		if(!menu){
+			console.error(`Le menuId ${menuId} n'existe pas.`);
+			return null;
+		}
+
+		return menu;
+	}
+
+	const colorBtn = "rgb(110, 109, 92)";
+
+	const btnMargin = { margin: "2px 5px" };
+
 	return (
 		<ThemeProvider theme={darkTheme}>
-			<Box display="flex" flexDirection="column" minHeight="100vh">
-				<Paper elevation={12} square>
-					<IconButton color="primary" aria-label="Action XYZ ?" onClick={onClick}><Public /></IconButton>
-					<Button variant="text" color="primary" onClick={e => setAnchor(e.currentTarget)}>Menu 1</Button>
-					<DropdownMenu anchor={anchor} onClose={() => setAnchor(undefined)} menu={[
-						{
-							label: "Action 1",
-							icon: <Public />,
-							shortcut: "Ctrl+S",
-							action: () => console.log("Bouton Action 1 cliqué"),
-						},
-						{
-							label: "Action 2",
-							icon: <Public />,
-							hasDividerBelow: true,
-							action: () => console.log("Bouton Action 2 cliqué"),
-						},
-						{
-							label: "Action 3",
-							icon: <Public />,
-							action: () => console.log("Bouton Action 3 cliqué"),
-						},
-						{
-							label: "truc",
-							icon: <Public />,
-							children: [
-								{
-									label: "subaction 5",
-									icon: <Public />,
-									action: () => console.log("Bouton subaction 5 cliqué"),
-								},
-							]
-						},
-					]} />
-					<Button variant="text" color="primary" onClick={onClick}>Menu 2</Button>
-					<Button variant="text" color="primary" onClick={onClick}>Menu 3</Button>
+			<Paper elevation={1} square sx={{ minHeight: "100vh" }}>
+
+				<Paper elevation={12} square sx={{ display: "flex", alignItems: "center", color: colorBtn }}>
+					<Box flex={1} display="flex" alignItems="center">
+						<IconButton color="inherit" onClick={onClick}><Public /></IconButton>
+
+						<Divider color="inherit" orientation="vertical" variant="middle" flexItem />
+
+						<Button variant="text" color="inherit" sx={btnMargin} onClick={e => setAnchorMenu1(e.currentTarget)}>Fichier</Button>
+						{displayDropdownMenu("fichier")}
+
+						<Button variant="text" color="inherit" sx={btnMargin} onClick={e => setAnchorMenu2(e.currentTarget)}>Edition</Button>
+						{displayDropdownMenu("edition")}
+					</Box>
+
+					<Box position="relative">
+						<Typography id="idGridName" variant="body1">Chord Grids Editor</Typography>
+						<IconButton
+							color="inherit"
+							sx={{ position: "absolute", left: "calc(100% + 10px)", top: "50%", transform: "translateY(-50%)" }}
+							onClick={() => console.log("Modifier le nom")}
+						>
+							<Edit />
+						</IconButton>
+					</Box>
+
+					<Box flex={1} display="flex" alignItems="center" justifyContent="flex-end">
+						<Button variant="contained"><Edit />Share</Button>
+						<IconButton><AccountCircle /></IconButton>
+					</Box>
 				</Paper>
 				<Paper elevation={6} square>
-					<IconButton color="primary" aria-label="Action XYZ ?" onClick={onClick}><Public /></IconButton>
+					<IconButton color="primary" onClick={onClick}><Public /></IconButton>
 				</Paper>
 				<Box display="flex" flex={1}>
 					<Paper elevation={1} square sx={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -122,7 +195,6 @@ export function App({}: AppProps) {
 		</ThemeProvider>
 	);
 }
-
 App.defaultProps = {};
 
 export default App;
