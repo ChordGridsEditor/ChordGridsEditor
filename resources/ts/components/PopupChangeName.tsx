@@ -8,13 +8,19 @@ import {
 	DialogTitle,
 	TextField
 } from "@mui/material";
-
 import { Check, Close } from "@mui/icons-material";
 
+export interface PopupChangeNameProps {
+	currentName: string;
+	setNewName: (newName: string) => void;
+	open: boolean;
+	onClose: () => void;
+}
 
-export function PopupChangeName({ currentName, setNewName, open, onClose }: any) {
+export function PopupChangeName({ currentName, setNewName, open, onClose }: PopupChangeNameProps) {
 	const handleValidateNewName = () => {
 		const newName = (document.getElementById("myNewNameInputId") as HTMLInputElement).value;
+		if(!newName) return onClose(); // Retourne l'ancien nom si l'utilisateur confirme un nom vide
 		setNewName(newName);
 		onClose();
 	}
@@ -49,7 +55,6 @@ export function PopupChangeName({ currentName, setNewName, open, onClose }: any)
 		</Dialog>
 	);
 }
-
-
 PopupChangeName.defaultProps = {};
+
 export default PopupChangeName;
