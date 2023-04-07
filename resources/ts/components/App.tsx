@@ -16,6 +16,7 @@ import { Edit, Public, ViewQuiltOutlined } from "@mui/icons-material";
 import axios from "axios";
 import DropdownMenu from "./DropdownMenu";
 import SelectableButtonGroup from "./SelectableButtonGroup";
+import PopupChangeName from "./PopupChangeName";
 
 const darkTheme = createTheme({
 	palette: {
@@ -36,7 +37,9 @@ export function App({}: AppProps) {
 	const [ anchorMenu1, setAnchorMenu1 ] = useState<HTMLElement>();
 	const [ anchorMenu2, setAnchorMenu2 ] = useState<HTMLElement>();
 	const [ shape, setShape ] = useState<Shape>("0000");
-	const [ chord, setChord ] = useState<Chord>("C")
+	const [ chord, setChord ] = useState<Chord>("C");
+	const [ popupChangeNameIsOpen, setPopupChangeNameIsOpen ] = useState<boolean>(false);
+	const [ appName, setAppName ] = useState<string>("Chord Grids Editor");
 
 	const onClick = () => {
 		axios.get("/health").then(console.log, console.error);
@@ -123,7 +126,7 @@ export function App({}: AppProps) {
 					</Box>
 
 					<Box position="relative">
-						<Typography id="idGridName" variant="body1">Chord Grids Editor</Typography>
+						<Typography id="idGridName" variant="body1">{appName}</Typography>
 						<IconButton
 							sx={{
 								position: "absolute",
@@ -132,10 +135,17 @@ export function App({}: AppProps) {
 								transform: "translateY(-50%)",
 								color: "text.secondary"
 						}}
-							onClick={() => console.log("Modifier le nom")}
+							onClick={() => setPopupChangeNameIsOpen(true)}
 						>
 							<Edit />
 						</IconButton>
+
+						<PopupChangeName
+							currentName={appName}
+							setNewName={setAppName}
+							open={popupChangeNameIsOpen}
+							onClose={() => setPopupChangeNameIsOpen(false)}
+						/>
 					</Box>
 
 					<Box flex={1} display="flex" alignItems="center" justifyContent="flex-end" columnGap={2}>
