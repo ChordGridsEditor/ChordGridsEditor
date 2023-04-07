@@ -69,21 +69,14 @@ export function App({}: AppProps) {
 			icon: <Public />,
 			children: [
 				{
-					label: "truc",
+					label: "subaction 4",
 					icon: <Public />,
-					children: [
-						{
-							label: "truc",
-							icon: <Public />,
-							children: [
-								{
-									label: "subaction 5",
-									icon: <Public />,
-									action: () => console.log("Bouton subaction 5 cliqué"),
-								},
-							],
-						},
-					],
+					action: () => console.log("Bouton subaction 4 cliqué"),
+				},
+				{
+					label: "subaction 5",
+					icon: <Public />,
+					action: () => console.log("Bouton subaction 5 cliqué"),
 				},
 			],
 		},
@@ -107,33 +100,19 @@ export function App({}: AppProps) {
 
 						<Divider orientation="vertical" flexItem />
 
-						<Button
-							variant="text"
-							onClick={e => setAnchorMenu1(e.currentTarget)}
-							sx={{ color: "text.secondary" }}
-						>
+						<Button variant="text" onClick={e => setAnchorMenu1(e.currentTarget)} sx={{ color: "text.secondary" }}>
 							Fichier
 						</Button>
 						<DropdownMenu anchor={anchorMenu1} onClose={() => setAnchorMenu1(undefined)} menu={fileMenu} />
 
-						<Button
-							variant="text"
-							onClick={e => setAnchorMenu2(e.currentTarget)}
-							sx={{ color: "text.secondary" }}
-						>
+						<Button variant="text" onClick={e => setAnchorMenu2(e.currentTarget)} sx={{ color: "text.secondary" }}>
 							Edition
 						</Button>
 						<DropdownMenu anchor={anchorMenu2} onClose={() => setAnchorMenu2(undefined)} menu={editMenu} />
 					</Box>
 
-					<Box
-						position="relative"
-						onClick={() => setPopupChangeNameIsOpen(true)}
-						sx={{cursor: "pointer"}}
-					>
-						<Typography
-							id="idGridName"
-							variant="body1"
+					<Box position="relative" onClick={() => setPopupChangeNameIsOpen(true)} sx={{cursor: "pointer"}}>
+						<Typography id="idGridName" variant="body1"
 							onMouseOver={() => setShowNamePen(true)}
 							onMouseOut={() => setShowNamePen(false)}
 						>
@@ -163,25 +142,32 @@ export function App({}: AppProps) {
 					/>
 
 					<Box flex={1} display="flex" alignItems="center" justifyContent="flex-end" columnGap={2}>
-						<Button variant="contained" startIcon={<Edit />}>Share</Button>
+						<Button variant="contained" startIcon={<Edit />}>
+							Share
+						</Button>
 
 						<IconButton sx={{ p: 0.5 }}>
 							<Avatar sx={{ bgcolor: "text.secondary", width: 28.5, height: 28.5 }}>C</Avatar>
 						</IconButton>
 					</Box>
 				</Paper>
+
 				<Paper elevation={6} square sx={{ display: "flex", alignItems: "center", columnGap: 1, p: 1 }}>
 					<Tooltip title="Action 1">
 						<IconButton onClick={() => console.log("Action 1")} size="small" sx={{ color: "text.secondary" }}>
 							<Public />
 						</IconButton>
 					</Tooltip>
+
+					<Divider orientation="vertical" flexItem />
+
 					<Tooltip title="Action 2">
 						<IconButton onClick={() => console.log("Action 2")} size="small" sx={{ color: "text.secondary" }}>
 							<Public />
 						</IconButton>
 					</Tooltip>
 				</Paper>
+
 				<Box display="flex" flex={1}>
 					<Paper elevation={1} square sx={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
 						<Paper elevation={2} sx={{ width: "75%", height: "75%" }}>
