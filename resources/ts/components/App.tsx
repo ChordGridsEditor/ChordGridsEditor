@@ -40,6 +40,7 @@ export function App({}: AppProps) {
 	const [ chord, setChord ] = useState<Chord>("C");
 	const [ popupChangeNameIsOpen, setPopupChangeNameIsOpen ] = useState<boolean>(false);
 	const [ appName, setAppName ] = useState<string>("Chord Grids Editor");
+	const [ showNamePen, setShowNamePen ] = useState<boolean>(false);
 
 	const onClick = () => {
 		axios.get("/health").then(console.log, console.error);
@@ -125,28 +126,41 @@ export function App({}: AppProps) {
 						<DropdownMenu anchor={anchorMenu2} onClose={() => setAnchorMenu2(undefined)} menu={editMenu} />
 					</Box>
 
-					<Box position="relative">
-						<Typography id="idGridName" variant="body1">{appName}</Typography>
-						<IconButton
-							sx={{
-								position: "absolute",
-								left: "calc(100% + 10px)",
-								top: "50%",
-								transform: "translateY(-50%)",
-								color: "text.secondary"
-						}}
-							onClick={() => setPopupChangeNameIsOpen(true)}
+					<Box
+						position="relative"
+						onClick={() => setPopupChangeNameIsOpen(true)}
+						sx={{cursor: "pointer"}}
+					>
+						<Typography
+							id="idGridName"
+							variant="body1"
+							onMouseOver={() => setShowNamePen(true)}
+							onMouseOut={() => setShowNamePen(false)}
 						>
-							<Edit />
-						</IconButton>
+							{appName}
+						</Typography>
 
-						<PopupChangeName
-							currentName={appName}
-							setNewName={setAppName}
-							open={popupChangeNameIsOpen}
-							onClose={() => setPopupChangeNameIsOpen(false)}
-						/>
+						{showNamePen &&
+							<IconButton
+								sx={{
+									position: "absolute",
+									left: "calc(100% + 10px)",
+									top: "50%",
+									transform: "translateY(-50%)",
+									color: "text.secondary"
+								}}
+							>
+								<Edit/>
+							</IconButton>
+						}
 					</Box>
+
+					<PopupChangeName
+						currentName={appName}
+						setNewName={setAppName}
+						isOpen={popupChangeNameIsOpen}
+						onClose={() => setPopupChangeNameIsOpen(false)}
+					/>
 
 					<Box flex={1} display="flex" alignItems="center" justifyContent="flex-end" columnGap={2}>
 						<Button variant="contained" startIcon={<Edit />}>Share</Button>

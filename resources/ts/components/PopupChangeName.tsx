@@ -13,11 +13,11 @@ import { Check, Close } from "@mui/icons-material";
 export interface PopupChangeNameProps {
 	currentName: string;
 	setNewName: (newName: string) => void;
-	open: boolean;
+	isOpen: boolean;
 	onClose: () => void;
 }
 
-export function PopupChangeName({ currentName, setNewName, open, onClose }: PopupChangeNameProps) {
+export function PopupChangeName({ currentName, setNewName, isOpen, onClose }: PopupChangeNameProps) {
 	const handleValidateNewName = () => {
 		const newName = (document.getElementById("myNewNameInputId") as HTMLInputElement).value;
 		if(!newName) return onClose(); // Retourne l'ancien nom si l'utilisateur confirme un nom vide
@@ -26,7 +26,7 @@ export function PopupChangeName({ currentName, setNewName, open, onClose }: Popu
 	}
 
 	return (
-		<Dialog open={open} onClose={onClose}>
+		<Dialog open={isOpen} onClose={onClose}>
 			<DialogTitle>Rename chord grid</DialogTitle>
 
 			<DialogContent>
