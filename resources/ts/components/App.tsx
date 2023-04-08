@@ -32,12 +32,16 @@ export interface AppProps {
 
 type Shape = "0000" | "0011" | "0012" | "0122" | "0110" | "0120" | "0112" | "0123" | "0111" | "0100" | "0010" | "0001";
 type Chord = "C" | "D" | "E" | "F" | "G" | "A" | "B";
+type Mm = "minor" | "major";
+type Alteration = "flat" | "sharp";
 
 export function App({}: AppProps) {
 	const [ anchorMenu1, setAnchorMenu1 ] = useState<HTMLElement>();
 	const [ anchorMenu2, setAnchorMenu2 ] = useState<HTMLElement>();
 	const [ shape, setShape ] = useState<Shape>("0000");
 	const [ chord, setChord ] = useState<Chord>("C");
+	const [ minorMajor, setMinorMajor ] = useState<Mm>("minor");
+	const [ alteration, setAlteration ] = useState<Alteration>("flat");
 	const [ popupChangeNameIsOpen, setPopupChangeNameIsOpen ] = useState<boolean>(false);
 	const [ appName, setAppName ] = useState<string>("Chord Grids Editor");
 	const [ showNamePen, setShowNamePen ] = useState<boolean>(false);
@@ -159,10 +163,28 @@ export function App({}: AppProps) {
 						</IconButton>
 					</Tooltip>
 
+					<Tooltip title="Action 4">
+						<IconButton onClick={() => console.log("Action 4")} size="small" sx={{ color: "text.secondary" }}>
+							<Public />
+						</IconButton>
+					</Tooltip>
+
 					<Divider orientation="vertical" flexItem />
 
 					<Tooltip title="Action 2">
 						<IconButton onClick={() => console.log("Action 2")} size="small" sx={{ color: "text.secondary" }}>
+							<Public />
+						</IconButton>
+					</Tooltip>
+
+					<Tooltip title="Action 3">
+						<IconButton onClick={() => console.log("Action 3")} size="small" sx={{ color: "text.secondary" }}>
+							<Public />
+						</IconButton>
+					</Tooltip>
+
+					<Tooltip title="Action 5">
+						<IconButton onClick={() => console.log("Action 5")} size="small" sx={{ color: "text.secondary" }}>
 							<Public />
 						</IconButton>
 					</Tooltip>
@@ -190,7 +212,8 @@ export function App({}: AppProps) {
 							{ value: "0010", label: "0010" },
 							{ value: "0001", label: "0001" }
 						]} selected={shape} onSelect={setShape} wrap={4} />
-						<Typography variant="body1">Note</Typography>
+
+						<Typography variant="body1" sx={{ mt: 2 }}>Note</Typography>
 						<FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Repeat previous chord (%)" />
 						<SelectableButtonGroup options={[
 							{ value: "C", label: "C" },
@@ -201,8 +224,24 @@ export function App({}: AppProps) {
 							{ value: "A", label: "A" },
 							{ value: "B", label: "B" }
 						]} selected={chord} onSelect={setChord} />
-						<Typography variant="body1">mM</Typography>
-						<Typography variant="body1">b#</Typography>
+
+						<Box display="flex" flexDirection="row" sx={{ mt: 2 }} columnGap={4}>
+							<Box>
+								<Typography variant="body1">mM</Typography>
+								<SelectableButtonGroup options={[
+									{ value: "minor", label: "m" },
+									{ value: "major", label: "M" },
+								]} selected={minorMajor} onSelect={setMinorMajor} />
+							</Box>
+
+							<Box>
+								<Typography variant="body1">♭♯</Typography>
+								<SelectableButtonGroup options={[
+									{ value: "flat", label: "♭" },
+									{ value: "sharp", label: "♯" },
+								]} selected={alteration} onSelect={setAlteration} />
+							</Box>
+						</Box>
 					</Paper>
 				</Box>
 			</Box>
