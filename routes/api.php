@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GridController;
 use App\Http\Controllers\HealthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get("/health", [ HealthController::class, "healthCheck" ]);
+Route::get("/grids/{id}", [ GridController::class, "getGrid" ]);
+Route::post("/grids/{id}", [ GridController::class, "setGrid" ]);
